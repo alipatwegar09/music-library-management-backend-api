@@ -5,7 +5,7 @@ import { JWT_TOKEN_SECRET } from "../utils/constants.js";
 
 const LogoutController = async (req, res) => {
     try {
-        const token = req.headers.authorization?.split(" ")[1]; // Extract the token from the Authorization header
+        const token = req.headers.authorization?.split(" ")[1];
 
         if (!token) {
             return res.json(
@@ -13,7 +13,6 @@ const LogoutController = async (req, res) => {
             );
         }
 
-        // Verify the token
         try {
             Jwt.verify(token, JWT_TOKEN_SECRET);
         } catch (err) {

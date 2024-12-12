@@ -12,8 +12,6 @@ const AddUserController = async (req, res) => {
                 JsonGenerate(Statuscode.unauthorized, "No token provided, please log in")
             );
         }
-
-        // Verify the token and decode it
         let decoded;
         try {
             decoded = Jwt.verify(token, JWT_TOKEN_SECRET);
@@ -23,7 +21,6 @@ const AddUserController = async (req, res) => {
             );
         }
 
-        // Check if the user role is Admin
         const loggedInUser = await Signup.findById(decoded.userId);
         
         if (!loggedInUser || loggedInUser.role !== 'Admin') {
@@ -34,14 +31,11 @@ const AddUserController = async (req, res) => {
 
         const { email, password, role } = req.body;
 
-        // Validate role
         if (role === 'Admin') {
             return res.status(Statuscode.bad_request).json(
                 JsonGenerate(Statuscode.bad_request, "Cannot create a user with the admin role.")
             );
         }
-
-        // Check if user already exists
         const existingUser = await Signup.findOne({ email });
         console.log('existingUser', existingUser)
         if (existingUser) {
@@ -50,7 +44,6 @@ const AddUserController = async (req, res) => {
             );
         }
 
-        // Create the new user
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = new Signup({
             email:email,

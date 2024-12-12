@@ -9,5 +9,6 @@ export const Statuscode={
     unprocessable:409,
     logout_success:200,
     unauthorized:401,
-    forbidden:403
+    forbidden:403,
+    not_found:404
 }
