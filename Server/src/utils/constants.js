@@ -10,5 +10,6 @@ export const Statuscode={
     logout_success:200,
     unauthorized:401,
     forbidden:403,
-    not_found:404
+    not_found:404,
+    password_sucess:204
 }

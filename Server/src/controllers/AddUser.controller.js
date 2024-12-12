@@ -37,7 +37,6 @@ const AddUserController = async (req, res) => {
             );
         }
         const existingUser = await Signup.findOne({ email });
-        console.log('existingUser', existingUser)
         if (existingUser) {
             return res.status(Statuscode.unprocessable).json(
                 JsonGenerate(Statuscode.unprocessable, "Email already exists.")
@@ -50,7 +49,6 @@ const AddUserController = async (req, res) => {
             password: hashedPassword,
             role: role,
         });
-        console.log('new User',newUser)
         await newUser.save();
 
         return res.status(Statuscode.success).json(

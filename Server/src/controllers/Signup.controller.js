@@ -17,7 +17,6 @@ const SignupController = async(req, res) => {
 
   const salt = await bcrypt.genSalt(10);
   const hashPassword = await bcrypt.hash(password, salt);
-
   const emailExist=await Signup.findOne({
     email:email
   })
@@ -31,7 +30,7 @@ const SignupController = async(req, res) => {
     const result = await Signup.create({
       email: email,
       password: hashPassword,
-      role:role
+      role:role,
     })
     const token = Jwt.sign({userId:result._id},JWT_TOKEN_SECRET)
     return res.json(

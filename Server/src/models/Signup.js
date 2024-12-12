@@ -4,6 +4,7 @@ const SignupSchema=new mongoose.Schema({
     email: { type: String, unique: true, required: true },
     password: { type: String, required: true },
     role: { type: String, enum: ['Admin', 'Editor', 'Viewer'], default: 'Viewer' },
+    created_at: { type: Date, default: Date.now }
 })
 
 SignupSchema.pre('save', async function (next) {

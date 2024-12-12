@@ -22,7 +22,6 @@ const GetUsersController = async (req, res) => {
             );
         }
         const loggedInUser = await User.findById(decoded.userId);
-        console.log(loggedInUser,loggedInUser.role)
         if (!loggedInUser || loggedInUser.role !== 'Admin') {
             return res.json(
                 JsonGenerate(Statuscode.unauthorized, "Unauthorized Access")
