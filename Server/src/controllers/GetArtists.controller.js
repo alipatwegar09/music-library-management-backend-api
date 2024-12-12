@@ -36,7 +36,6 @@ const getArtists = async (req, res) => {
         .skip(offset)
         .limit(limit)
         .select('artist_id name grammy hidden');
-        console.log(artists)
         return res.json(
             JsonGenerate(Statuscode.success, "Artists retreived successfully.",artists)
         );
