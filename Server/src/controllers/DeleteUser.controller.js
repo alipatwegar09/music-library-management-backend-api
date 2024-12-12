@@ -8,7 +8,7 @@ const DeleteUserController = async (req, res) => {
     try {
         const token = req.headers.authorization?.split(" ")[1];
         if (!token) {
-            return res.status(Statuscode.unauthorized).json(
+            return res.json(
                 JsonGenerate(Statuscode.unauthorized, "Unauthorized Access")
             );
         }
@@ -17,13 +17,13 @@ const DeleteUserController = async (req, res) => {
         try {
             decoded = Jwt.verify(token, JWT_TOKEN_SECRET);
         } catch (err) {
-            return res.status(Statuscode.unauthorized).json(
+            return res.json(
                 JsonGenerate(Statuscode.unauthorized, "Unauthorized Access")
             );
         }
         const loggedInUser = await Signup.findById(decoded.userId);
         if (!loggedInUser || loggedInUser.role !== 'Admin') {
-            return res.status(Statuscode.forbidden).json(
+            return res.json(
                 JsonGenerate(Statuscode.forbidden, "Forbidden Access/Operation not allowed.")
             );
         }
@@ -32,17 +32,17 @@ const DeleteUserController = async (req, res) => {
 
         const userToDelete = await Signup.findById(user_id);
         if (!userToDelete) {
-            return res.status(Statuscode.not_found).json(
+            return res.json(
                 JsonGenerate(Statuscode.not_found, "User not found.")
             );
         }
         await Signup.findByIdAndDelete(user_id);
 
-        return res.status(Statuscode.success).json(
+        return res.json(
             JsonGenerate(Statuscode.success, "User deleted successfully.")
         );
     } catch (error) {
-        return res.status(Statuscode.not_found).json(
+        return res.json(
             JsonGenerate(Statuscode.not_found, "User not found.")
         );
     }
