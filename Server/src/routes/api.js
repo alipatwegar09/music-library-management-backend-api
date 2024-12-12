@@ -13,9 +13,9 @@ import getArtists from '../controllers/GetArtists.controller.js';
 import { ArtistSchema } from '../ValidationSchema/ArtistSchema.js';
 import addArtist from '../controllers/AddArtist.controller.js';
 import GetArtistControllerById from '../controllers/GetArtistById.controller.js';
+import updateArtist from '../controllers/UpdateArtist.controller.js';
 const apiRoute=express.Router();
 
-// apiRoute.post('/login',(req,res)=> res.send('login'))
 apiRoute.post('/signup',SignupSchema, SignupController)
 apiRoute.post('/login',LoginSchema,LoginController)
 apiRoute.post('/logout', LogoutController)
@@ -27,4 +27,5 @@ apiRoute.put('/users/update-password',UpdatePasswordController)
 apiRoute.get('/artists',ArtistSchema, getArtists);
 apiRoute.post('/artists/add-artist',addArtist)
 apiRoute.get('/artists/:artist_id', GetArtistControllerById );
+apiRoute.put('/artists/:artist_id', updateArtist);
 export default apiRoute;
