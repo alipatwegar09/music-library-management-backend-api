@@ -20,6 +20,11 @@ import getAlbums from '../controllers/GetAlbums.controller.js';
 import deleteAlbum from '../controllers/DeleteAlbum.controller.js';
 import GetAlbumControllerById from '../controllers/GetAlbumById.controller.js';
 import updateAlbum from '../controllers/UpdateAlbum.controller.js';
+import addTrack from '../controllers/AddTrack.controller.js';
+import updateTrack from '../controllers/UpdateTrack.controller.js';
+import deleteTrack from '../controllers/DeleteTrack.controller.js';
+import GetTrackControllerById from '../controllers/GetTrackById.controller.js';
+import getAllTracks from '../controllers/getTracks.controller.js';
 const apiRoute=express.Router();
 
 apiRoute.post('/signup',SignupSchema, SignupController)
@@ -41,4 +46,10 @@ apiRoute.get('/albums', getAlbums);
 apiRoute.delete('/albums/:album_id', deleteAlbum);
 apiRoute.get('/albums/:album_id', GetAlbumControllerById);
 apiRoute.put('/albums/:album_id', updateAlbum);
+
+apiRoute.post('/tracks/add-track', addTrack);
+apiRoute.get('/tracks', getAllTracks);
+apiRoute.put('/tracks/:track_id', updateTrack);
+apiRoute.delete('/tracks/:track_id', deleteTrack);
+apiRoute.get('/tracks/:track_id', GetTrackControllerById);
 export default apiRoute;
