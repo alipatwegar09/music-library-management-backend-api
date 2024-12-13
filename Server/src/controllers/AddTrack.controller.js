@@ -6,12 +6,13 @@ import Artist from "../models/Artist.js";
 import Album from "../models/Album.js";
 import Track from "../models/Track.js";
 import crypto from "crypto";
+import Signup from "../models/Signup.js";
 const addTrack = async (req, res) => {
     try {
         const token = req.headers.authorization?.split(" ")[1];
 
         if (!token) {
-            return res.status(Statuscode.unauthorized).json(
+            return res.json(
                 JsonGenerate(Statuscode.unauthorized, "Unauthorized Access")
             );
         }
@@ -19,16 +20,21 @@ const addTrack = async (req, res) => {
         try {
             decoded = Jwt.verify(token, JWT_TOKEN_SECRET);
         } catch (err) {
-            return res.status(Statuscode.unauthorized).json(
+            return res.json(
                 JsonGenerate(Statuscode.unauthorized, "Invalid or expired token")
             );
         }
-
+        const loggedInUser = await Signup.findById(decoded.userId);
+        if (!loggedInUser || loggedInUser.role == 'Viewer' || loggedInUser.role == 'Editor') {
+            return res.json(
+                JsonGenerate(Statuscode.forbidden, "Forbidden Access/Operation not allowed.")
+            );
+        }
         const { artist_id, album_id, name, duration, hidden } = req.body;
 
         // Basic validation
         if (!artist_id || !album_id || !name || !duration || typeof hidden !== "boolean") {
-            return res.status(Statuscode.bad_request).json(
+            return res.json(
                 JsonGenerate(Statuscode.bad_request, "Invalid request body")
             );
         }
@@ -36,7 +42,7 @@ const addTrack = async (req, res) => {
         // Check if artist exists
         const artist = await Artist.findOne({artist_id});
         if (!artist) {
-            return res.status(Statuscode.not_found).json(
+            return res.json(
                 JsonGenerate(Statuscode.not_found, "Artist not found")
             );
         }
@@ -45,7 +51,7 @@ const addTrack = async (req, res) => {
         const album = await Album.findOne({album_id});
         console.log(album_id)
         if (!album) {
-            return res.status(Statuscode.not_found).json(
+            return res.json(
                 JsonGenerate(Statuscode.not_found, "Album not found")
             );
         }
@@ -63,13 +69,13 @@ const addTrack = async (req, res) => {
         // Save the new track to the database
         await newTrack.save();
 
-        return res.status(Statuscode.success).json(
+        return res.json(
             JsonGenerate(Statuscode.success, "Track created successfully.")
         );
     } catch (error) {
         console.error(error);
-        return res.status(Statuscode.not_found).json(
-            JsonGenerate(Statuscode.not_found, "Internal server error")
+        return res.json(
+            JsonGenerate(Statuscode.not_found, "Bad Request")
         );
     }
 };

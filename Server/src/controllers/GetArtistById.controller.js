@@ -3,12 +3,13 @@ import { JsonGenerate } from "../utils/helpers.js";
 import Jwt from 'jsonwebtoken'; 
 import { JWT_TOKEN_SECRET } from "../utils/constants.js"; 
 import Artist from "../models/Artist.js"; 
+import Signup from "../models/Signup.js";
 
 const GetArtistControllerById = async (req, res) => {
     try {
         const token = req.headers.authorization?.split(" ")[1];
         if (!token) {
-            return res.status(Statuscode.unauthorized).json(
+            return res.json(
                 JsonGenerate(Statuscode.unauthorized, "No token provided, please log in")
             );
         }
@@ -16,15 +17,21 @@ const GetArtistControllerById = async (req, res) => {
         try {
             decoded = Jwt.verify(token, JWT_TOKEN_SECRET);
         } catch (err) {
-            return res.status(Statuscode.unauthorized).json(
-                JsonGenerate(Statuscode.unauthorized, "Invalid or expired token, please log in again")
+            return res.json(
+                JsonGenerate(Statuscode.unauthorized, "Bad Request")
+            );
+        }
+        const loggedInUser = await Signup.findById(decoded.userId);
+        if (!loggedInUser) {
+            return res.json(
+                JsonGenerate(Statuscode.forbidden, "Forbidden Access/Operation not allowed.")
             );
         }
 
         const { artist_id } = req.params;
         const artist = await Artist.findOne({ artist_id });
         if (!artist) {
-            return res.status(Statuscode.not_found).json(
+            return res.json(
                 JsonGenerate(Statuscode.not_found, "Artist not found.")
             );
         }
@@ -41,8 +48,8 @@ const GetArtistControllerById = async (req, res) => {
         );
     } catch (error) {
         console.error("Error retrieving artist:", error.message);
-        return res.status(Statuscode.bad_request).json(
-            JsonGenerate(Statuscode.bad_request, "An error occurred while retrieving the artist.")
+        return res.json(
+            JsonGenerate(Statuscode.bad_request, "Bad Request while retrieving the artist.")
         );
     }
 };

@@ -22,7 +22,7 @@ const LogoutController = async (req, res) => {
         }
         tokenBlacklist.add(token);
         return res.json(
-            JsonGenerate(Statuscode.logout_success, "User Logged out Successful")
+            JsonGenerate(Statuscode.success_done, "User Logged out Successful")
         );
     } catch (error) {
         return res.json(
@@ -30,11 +30,12 @@ const LogoutController = async (req, res) => {
         );
     }
 }
+
 export const checkTokenBlacklist = (req, res, next) => {
     const token = req.headers.authorization?.split(" ")[1];
 
     if (token && tokenBlacklist.has(token)) {
-        return res.status(Statuscode.unauthorized).json(
+        return res.json(
             JsonGenerate(Statuscode.unauthorized, "Unauthorized Access")
         );
     }

@@ -10,7 +10,7 @@ const updateTrack = async (req, res) => {
         const token = req.headers.authorization?.split(" ")[1];
 
         if (!token) {
-            return res.status(Statuscode.unauthorized).json(
+            return res.json(
                 JsonGenerate(Statuscode.unauthorized, "No token provided, please log in")
             );
         }
@@ -19,14 +19,14 @@ const updateTrack = async (req, res) => {
         try {
             decoded = Jwt.verify(token, JWT_TOKEN_SECRET);
         } catch (err) {
-            return res.status(Statuscode.unauthorized).json(
-                JsonGenerate(Statuscode.unauthorized, "Invalid or expired token, please log in again")
+            return res.json(
+                JsonGenerate(Statuscode.unauthorized, "Bad Request")
             );
         }
 
         const loggedInUser = await Signup.findById(decoded.userId);
-        if (!loggedInUser || loggedInUser.role !== 'Admin') {
-            return res.status(Statuscode.forbidden).json(
+        if (!loggedInUser || loggedInUser.role == 'Viewer') {
+            return res.json(
                 JsonGenerate(Statuscode.forbidden, "Forbidden Access. You must be an admin.")
             );
         }
@@ -34,7 +34,7 @@ const updateTrack = async (req, res) => {
         const track = await Track.findOne({ track_id });
 
         if (!track) {
-            return res.status(Statuscode.not_found).json(
+            return res.json(
                 JsonGenerate(Statuscode.not_found, "Track not found")
             );
         }
@@ -45,13 +45,13 @@ const updateTrack = async (req, res) => {
 
         await track.save();
 
-        return res.status(Statuscode.success).json(
+        return res.json(
             JsonGenerate(Statuscode.success, "Track updated successfully")
         );
     } catch (error) {
         console.error("Error updating Track:", error.message);
-        return res.status(Statuscode.bad_request).json(
-            JsonGenerate(Statuscode.bad_request, "An error occurred while updating the Track")
+        return res.json(
+            JsonGenerate(Statuscode.bad_request, "Bad Request while updating the Track")
         );
     }
 };

@@ -3,12 +3,13 @@ import { JsonGenerate } from "../utils/helpers.js";
 import Jwt from 'jsonwebtoken';
 import { JWT_TOKEN_SECRET } from "../utils/constants.js";
 import Album from "../models/Album.js";
+import Signup from "../models/Signup.js";
 
 const GetAlbumControllerById = async (req, res) => {
     try {
         const token = req.headers.authorization?.split(" ")[1];
         if (!token) {
-            return res.status(Statuscode.unauthorized).json(
+            return res.json(
                 JsonGenerate(Statuscode.unauthorized, "No token provided, please log in")
             );
         }
@@ -16,15 +17,20 @@ const GetAlbumControllerById = async (req, res) => {
         try {
             decoded = Jwt.verify(token, JWT_TOKEN_SECRET);
         } catch (err) {
-            return res.status(Statuscode.unauthorized).json(
-                JsonGenerate(Statuscode.unauthorized, "Invalid or expired token, please log in again")
+            return res.json(
+                JsonGenerate(Statuscode.unauthorized, "Bad Request")
             );
         }
-
+        const loggedInUser = await Signup.findById(decoded.userId);
+        if (!loggedInUser) {
+            return res.json(
+                JsonGenerate(Statuscode.forbidden, "Forbidden Access/Operation not allowed.")
+            );
+        }
         const { album_id } = req.params;
         const album = await Album.findOne({ album_id });
         if (!album) {
-            return res.status(Statuscode.not_found).json(
+            return res.json(
                 JsonGenerate(Statuscode.not_found, "Album not found.")
             );
         }
@@ -41,8 +47,8 @@ const GetAlbumControllerById = async (req, res) => {
         );
     } catch (error) {
         console.error("Error retrieving Album:", error.message);
-        return res.status(Statuscode.bad_request).json(
-            JsonGenerate(Statuscode.bad_request, "An error occurred while retrieving the Album.")
+        return res.json(
+            JsonGenerate(Statuscode.bad_request, "Bad Request while retrieving the Album.")
         );
     }
 };

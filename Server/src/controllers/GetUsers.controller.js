@@ -18,7 +18,7 @@ const GetUsersController = async (req, res) => {
             decoded = Jwt.verify(token, JWT_TOKEN_SECRET);
         } catch (err) {
             return res.json(
-                JsonGenerate(Statuscode.bad_request, "Invalid or expired token, please log in again")
+                JsonGenerate(Statuscode.bad_request, "Bad Request")
             );
         }
         const loggedInUser = await User.findById(decoded.userId);
@@ -41,11 +41,11 @@ const GetUsersController = async (req, res) => {
             .select('user_id email role created_at');
 
         return res.json(
-            JsonGenerate(Statuscode.success, "Users retrieved successfully.", users)
+            JsonGenerate(Statuscode.success_done, "Users retrieved successfully.", users)
         );
     } catch (error) {
         return res.json(
-            JsonGenerate(Statuscode.bad_request, "An error occurred while retrieving users")
+            JsonGenerate(Statuscode.bad_request, "Bad Request while retrieving users")
         );
     }
 };

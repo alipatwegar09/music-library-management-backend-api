@@ -20,7 +20,7 @@ const getAllTracks = async (req, res) => {
             decoded = Jwt.verify(token, JWT_TOKEN_SECRET);
         } catch (err) {
             return res.json(
-                JsonGenerate(Statuscode.bad_request, "Invalid or expired token, please log in again")
+                JsonGenerate(Statuscode.bad_request, "Bad Request")
             );
         }
         const loggedInUser = await Signup.findById(decoded.userId);
@@ -46,12 +46,9 @@ const getAllTracks = async (req, res) => {
             .limit(limit);
             
         if (!tracks.length) {
-            return res.status(404).json({
-                status: 404,
-                message: "No tracks found",
-                data: [],
-                error: null,
-            });
+            return res.json(
+                JsonGenerate(Statuscode.bad_request, "Bad Request")
+            );
         }
         const enrichedTracks = await Promise.all(
             tracks.map(async (track) => {
@@ -75,7 +72,7 @@ const getAllTracks = async (req, res) => {
     } catch (error) {
         console.error(error);
         return res.json(
-            JsonGenerate(Statuscode.bad_request, "An error occurred")
+            JsonGenerate(Statuscode.bad_request, "Bad Request")
         );
     }
 };

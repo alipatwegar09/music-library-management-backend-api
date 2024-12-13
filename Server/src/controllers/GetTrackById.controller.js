@@ -11,7 +11,7 @@ const GetTrackControllerById = async (req, res) => {
         const token = req.headers.authorization?.split(" ")[1];
 
         if (!token) {
-            return res.status(Statuscode.unauthorized).json(
+            return res.json(
                 JsonGenerate(Statuscode.unauthorized, "Unauthorized Access")
             );
         }
@@ -20,7 +20,7 @@ const GetTrackControllerById = async (req, res) => {
         try {
             decoded = Jwt.verify(token, JWT_TOKEN_SECRET);
         } catch (err) {
-            return res.status(Statuscode.unauthorized).json(
+            return res.json(
                 JsonGenerate(Statuscode.unauthorized, "Invalid or expired token")
             );
         }
@@ -28,7 +28,7 @@ const GetTrackControllerById = async (req, res) => {
         const {track_id} = req.params;
 
         if (!track_id) {
-            return res.status(Statuscode.bad_request).json(
+            return res.json(
                 JsonGenerate(Statuscode.bad_request, "Track ID is required.")
             );
         }
@@ -36,7 +36,7 @@ const GetTrackControllerById = async (req, res) => {
         const track = await Track.findOne({ track_id });
         console.log(track)
         if (!track) {
-            return res.status(Statuscode.not_found).json(
+            return res.json(
                 JsonGenerate(Statuscode.not_found, "Track not found.")
             );
         }
@@ -45,7 +45,7 @@ const GetTrackControllerById = async (req, res) => {
         console.log(artist);
         console.log(album)
         if (!artist || !album) {
-            return res.status(Statuscode.not_found).json(
+            return res.json(
                 JsonGenerate(Statuscode.not_found, "Associated artist or album not found.")
             );
         }
@@ -59,13 +59,13 @@ const GetTrackControllerById = async (req, res) => {
             hidden: track.hidden,
         };
 
-        return res.status(Statuscode.success).json(
+        return res.json(
             JsonGenerate(Statuscode.success, "Track retrieved successfully.", trackData)
         );
     } catch (error) {
         console.error(error);
-        return res.status(Statuscode.not_found).json(
-            JsonGenerate(Statuscode.not_found, "Internal server error")
+        return res.json(
+            JsonGenerate(Statuscode.not_found, "Bad Request")
         );
     }
 };

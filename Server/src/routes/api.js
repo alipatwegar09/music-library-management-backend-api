@@ -25,6 +25,9 @@ import updateTrack from '../controllers/UpdateTrack.controller.js';
 import deleteTrack from '../controllers/DeleteTrack.controller.js';
 import GetTrackControllerById from '../controllers/GetTrackById.controller.js';
 import getAllTracks from '../controllers/getTracks.controller.js';
+import addFavorite from '../controllers/AddFavourites.controller.js';
+import getFavoritesByCategory from '../controllers/GetFavouritesByCategory.controller.js';
+import removeFavorite from '../controllers/removeFavourite.controller.js';
 const apiRoute=express.Router();
 
 apiRoute.post('/signup',SignupSchema, SignupController)
@@ -52,4 +55,8 @@ apiRoute.get('/tracks', getAllTracks);
 apiRoute.put('/tracks/:track_id', updateTrack);
 apiRoute.delete('/tracks/:track_id', deleteTrack);
 apiRoute.get('/tracks/:track_id', GetTrackControllerById);
+
+apiRoute.post('/favorites/add-favorite',addFavorite)
+apiRoute.get('/favorites/:category',getFavoritesByCategory)
+apiRoute.delete('/favorites/remove-favourite/:id', removeFavorite)
 export default apiRoute;

@@ -18,19 +18,19 @@ const LoginController = async (req, res) => {
         const user=await Signup.findOne({email:email})
         if(!user){
             return res.json(
-                JsonGenerate(Statuscode.unprocessable, "User not found")
+                JsonGenerate(Statuscode.not_found, "User not found")
             );
         }
         const verified = bcrypt.compareSync(password, user.password)
         if (!verified) {
             return res.json(
-                JsonGenerate(Statuscode.unprocessable, "User not found")
+                JsonGenerate(Statuscode.not_found, "User not found")
             );
         }
 
         const token = Jwt.sign({ userId: user._id }, JWT_TOKEN_SECRET)
         return res.json(
-            JsonGenerate(Statuscode.success, "login Successfull", { token: token })
+            JsonGenerate(Statuscode.success_done, "login Successfull", { token: token })
         );
     }
     

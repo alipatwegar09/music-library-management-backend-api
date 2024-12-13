@@ -19,13 +19,13 @@ const deleteAlbum = async (req, res) => {
             decoded = Jwt.verify(token, JWT_TOKEN_SECRET);
         } catch (err) {
             return res.json(
-                JsonGenerate(Statuscode.unauthorized, "Invalid or expired token, please log in again")
+                JsonGenerate(Statuscode.unauthorized, "Bad Request")
             );
         }
 
         const loggedInUser = await Signup.findById(decoded.userId);
-        if (!loggedInUser || loggedInUser.role !== 'Admin') {
-            return res.status(Statuscode.forbidden).json(
+        if (!loggedInUser || loggedInUser.role == 'Viewer') {
+            return res.json(
                 JsonGenerate(Statuscode.forbidden, "Forbidden Access. You must be an admin.")
             );
         }
@@ -33,7 +33,7 @@ const deleteAlbum = async (req, res) => {
         const { album_id } = req.params;
         const album = await Album.findOne({ album_id });
         if (!album) {
-            return res.status(Statuscode.not_found).json(
+            return res.json(
                 JsonGenerate(Statuscode.not_found, "Album not found")
             );
         }
@@ -45,7 +45,7 @@ const deleteAlbum = async (req, res) => {
     } catch (error) {
         console.error("Error deleting album:", error.message);
         return res.json(
-            JsonGenerate(Statuscode.bad_request, "An error occurred while deleting the album")
+            JsonGenerate(Statuscode.bad_request, "Bad Request while deleting the album")
         );
     }
 };

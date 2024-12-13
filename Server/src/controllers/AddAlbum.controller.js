@@ -17,11 +17,11 @@ const addAlbum = async (req, res) => {
             decoded = Jwt.verify(token, JWT_TOKEN_SECRET);
         } catch (err) {
             return res.json(
-                JsonGenerate(Statuscode.unauthorized, "Invalid or expired token, please log in again")
+                JsonGenerate(Statuscode.unauthorized, "Bad Request")
             );
         }
         const loggedInUser = await Signup.findById(decoded.userId);
-        if (!loggedInUser) {
+        if (!loggedInUser || loggedInUser.role == 'Viewer' || loggedInUser.role == 'Editor') {
             return res.json(
                 JsonGenerate(Statuscode.forbidden, "Forbidden Access/Operation not allowed.")
             );
@@ -48,7 +48,7 @@ const addAlbum = async (req, res) => {
     } catch (error) {
         console.error("Error adding Album:", error.message);
         return res.json(
-            JsonGenerate(Statuscode.bad_request, "An error occurred while creating the Album.", error.message)
+            JsonGenerate(Statuscode.bad_request, "Bad Request while creating the Album.", error.message)
         );
     }
 };

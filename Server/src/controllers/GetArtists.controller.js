@@ -17,7 +17,7 @@ const getArtists = async (req, res) => {
             decoded = Jwt.verify(token, JWT_TOKEN_SECRET);
         } catch (err) {
             return res.json(
-                JsonGenerate(Statuscode.bad_request, "Invalid or expired token, please log in again")
+                JsonGenerate(Statuscode.bad_request, "Bad Request")
             );
         }
         const loggedInUser = await Signup.findById(decoded.userId);
@@ -41,7 +41,7 @@ const getArtists = async (req, res) => {
         );
     } catch (error) {
         return res.json(
-            JsonGenerate(Statuscode.bad_request, "An error occurred")
+            JsonGenerate(Statuscode.bad_request, "Bad Request")
         );
     }
 };

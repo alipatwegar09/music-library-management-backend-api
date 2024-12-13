@@ -8,7 +8,7 @@ const AddUserController = async (req, res) => {
     try {
         const token = req.headers.authorization?.split(" ")[1];
         if (!token) {
-            return res.status(Statuscode.unauthorized).json(
+            return res.json(
                 JsonGenerate(Statuscode.unauthorized, "No token provided, please log in")
             );
         }
@@ -16,15 +16,15 @@ const AddUserController = async (req, res) => {
         try {
             decoded = Jwt.verify(token, JWT_TOKEN_SECRET);
         } catch (err) {
-            return res.status(Statuscode.unauthorized).json(
-                JsonGenerate(Statuscode.unauthorized, "Invalid or expired token, please log in again")
+            return res.json(
+                JsonGenerate(Statuscode.unauthorized, "Bad Request")
             );
         }
 
         const loggedInUser = await Signup.findById(decoded.userId);
         
         if (!loggedInUser || loggedInUser.role !== 'Admin') {
-            return res.status(Statuscode.forbidden).json(
+            return res.json(
                 JsonGenerate(Statuscode.forbidden, "Forbidden Access/Operation not allowed.")
             );
         }
@@ -32,13 +32,13 @@ const AddUserController = async (req, res) => {
         const { email, password, role } = req.body;
 
         if (role === 'Admin') {
-            return res.status(Statuscode.bad_request).json(
+            return res.json(
                 JsonGenerate(Statuscode.bad_request, "Cannot create a user with the admin role.")
             );
         }
         const existingUser = await Signup.findOne({ email });
         if (existingUser) {
-            return res.status(Statuscode.unprocessable).json(
+            return res.json(
                 JsonGenerate(Statuscode.unprocessable, "Email already exists.")
             );
         }
@@ -51,12 +51,12 @@ const AddUserController = async (req, res) => {
         });
         await newUser.save();
 
-        return res.status(Statuscode.success).json(
+        return res.json(
             JsonGenerate(Statuscode.success, "User created successfully.")
         );
     } catch (error) {
-        return res.status(Statuscode.bad_request).json(
-            JsonGenerate(Statuscode.bad_request, "An error occurred while creating the user")
+        return res.json(
+            JsonGenerate(Statuscode.bad_request, "Bad Request while creating the user")
         );
     }
 };
