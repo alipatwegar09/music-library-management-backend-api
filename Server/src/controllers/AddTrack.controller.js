@@ -32,14 +32,12 @@ const addTrack = async (req, res) => {
         }
         const { artist_id, album_id, name, duration, hidden } = req.body;
 
-        // Basic validation
         if (!artist_id || !album_id || !name || !duration || typeof hidden !== "boolean") {
             return res.json(
                 JsonGenerate(Statuscode.bad_request, "Invalid request body")
             );
         }
 
-        // Check if artist exists
         const artist = await Artist.findOne({artist_id});
         if (!artist) {
             return res.json(
@@ -47,16 +45,13 @@ const addTrack = async (req, res) => {
             );
         }
 
-        // Check if album exists
         const album = await Album.findOne({album_id});
-        console.log(album_id)
         if (!album) {
             return res.json(
                 JsonGenerate(Statuscode.not_found, "Album not found")
             );
         }
 
-        // Create a new track document
         const newTrack = new Track({
             track_id: crypto.randomUUID(),
             artist_id,
@@ -65,8 +60,6 @@ const addTrack = async (req, res) => {
             duration,
             hidden,
         });
-        console.log("new track",newTrack)
-        // Save the new track to the database
         await newTrack.save();
 
         return res.json(

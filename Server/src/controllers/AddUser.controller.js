@@ -4,6 +4,7 @@ import Jwt from 'jsonwebtoken';
 import { JWT_TOKEN_SECRET } from "../utils/constants.js";
 import Signup from "../models/Signup.js";
 import bcrypt from 'bcrypt';
+import { validationResult } from "express-validator";
 const AddUserController = async (req, res) => {
     try {
         const token = req.headers.authorization?.split(" ")[1];
@@ -17,7 +18,7 @@ const AddUserController = async (req, res) => {
             decoded = Jwt.verify(token, JWT_TOKEN_SECRET);
         } catch (err) {
             return res.json(
-                JsonGenerate(Statuscode.unauthorized, "Bad Request")
+                JsonGenerate(Statuscode.unauthorized, "Unauthorized Access")
             );
         }
 
@@ -28,9 +29,14 @@ const AddUserController = async (req, res) => {
                 JsonGenerate(Statuscode.forbidden, "Forbidden Access/Operation not allowed.")
             );
         }
-
         const { email, password, role } = req.body;
+        const errors = validationResult(req);
 
+        if (!errors.isEmpty()) {
+            return res.json(
+                JsonGenerate(Statuscode.bad_request, "Bad Request")
+            );
+        }
         if (role === 'Admin') {
             return res.json(
                 JsonGenerate(Statuscode.bad_request, "Cannot create a user with the admin role.")
@@ -42,7 +48,6 @@ const AddUserController = async (req, res) => {
                 JsonGenerate(Statuscode.unprocessable, "Email already exists.")
             );
         }
-
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = new Signup({
             email:email,

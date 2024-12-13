@@ -34,7 +34,7 @@ apiRoute.post('/signup',SignupSchema, SignupController)
 apiRoute.post('/login',LoginSchema,LoginController)
 apiRoute.post('/logout', LogoutController)
 apiRoute.get('/users', GetUsersController);
-apiRoute.post('/users/add-user', AddUserController);
+apiRoute.post('/users/add-user', SignupSchema,AddUserController);
 apiRoute.delete('/users/:user_id', DeleteUserController);
 apiRoute.put('/users/update-password',UpdatePasswordController)
 

@@ -34,7 +34,6 @@ const GetTrackControllerById = async (req, res) => {
         }
 
         const track = await Track.findOne({ track_id });
-        console.log(track)
         if (!track) {
             return res.json(
                 JsonGenerate(Statuscode.not_found, "Track not found.")
@@ -42,8 +41,6 @@ const GetTrackControllerById = async (req, res) => {
         }
         const artist = await Artist.findOne({ artist_id: track.artist_id });
         const album = await Album.findOne({ album_id: track.album_id });
-        console.log(artist);
-        console.log(album)
         if (!artist || !album) {
             return res.json(
                 JsonGenerate(Statuscode.not_found, "Associated artist or album not found.")
