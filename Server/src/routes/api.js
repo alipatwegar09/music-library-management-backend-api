@@ -15,6 +15,11 @@ import addArtist from '../controllers/AddArtist.controller.js';
 import GetArtistControllerById from '../controllers/GetArtistById.controller.js';
 import updateArtist from '../controllers/UpdateArtist.controller.js';
 import deleteArtist from '../controllers/DeleteArtist.controller.js';
+import addAlbum from '../controllers/AddAlbum.controller.js';
+import getAlbums from '../controllers/GetAlbums.controller.js';
+import deleteAlbum from '../controllers/DeleteAlbum.controller.js';
+import GetAlbumControllerById from '../controllers/GetAlbumById.controller.js';
+import updateAlbum from '../controllers/UpdateAlbum.controller.js';
 const apiRoute=express.Router();
 
 apiRoute.post('/signup',SignupSchema, SignupController)
@@ -30,4 +35,10 @@ apiRoute.post('/artists/add-artist',addArtist)
 apiRoute.get('/artists/:artist_id', GetArtistControllerById );
 apiRoute.put('/artists/:artist_id', updateArtist);
 apiRoute.delete('/artists/:artist_id',deleteArtist);
+
+apiRoute.post('/albums/add-album', addAlbum);
+apiRoute.get('/albums', getAlbums);
+apiRoute.delete('/albums/:album_id', deleteAlbum);
+apiRoute.get('/albums/:album_id', GetAlbumControllerById);
+apiRoute.put('/albums/:album_id', updateAlbum);
 export default apiRoute;
