@@ -11,11 +11,6 @@
             "src": "/(.*)",
             "dest": "/src/app.js"
         }
-    ],
-    "env": {
-        "NODE_ENV": "production",
-        "DB_CONNECT": "@db-connect",
-        "JWT_TOKEN_SECRET": "@jwt-token-secret",
-        "PORT": "8000"
-    }
+    ]
+   
 }
