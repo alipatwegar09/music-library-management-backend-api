@@ -14,6 +14,8 @@
     ],
     "env": {
         "NODE_ENV": "production",
-        "MONGODB_URI": "@mongodb-uri"
+        "DB_CONNECT": "@db-connect",
+        "JWT_TOKEN_SECRET": "@jwt-token-secret",
+        "PORT": "8000"
     }
 }
