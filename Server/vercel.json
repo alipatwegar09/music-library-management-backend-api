@@ -3,14 +3,22 @@
     "name": "music-app-sever",
     "builds": [
         {
+<<<<<<< HEAD
             "src": "app.js",
+=======
+            "src": "./src/app.js",
+>>>>>>> 32968fab15219440e8d82455f275b3a41b81f71e
             "use": "@vercel/node"
         }
     ],
     "routes": [
         {
             "src": "/(.*)",
-            "dest": "/src/app.js"
+            "dest": "/"
         }
     ]
+<<<<<<< HEAD
+=======
+   
+>>>>>>> 32968fab15219440e8d82455f275b3a41b81f71e
 }
