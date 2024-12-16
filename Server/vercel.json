@@ -1,8 +1,9 @@
 {
     "version": 2,
+    "name": "music-app-sever",
     "builds": [
         {
-            "src": "src/app.js",
+            "src": "app.js",
             "use": "@vercel/node"
         }
     ],
@@ -11,11 +12,5 @@
             "src": "/(.*)",
             "dest": "/src/app.js"
         }
-    ],
-    "env": {
-        "NODE_ENV": "production",
-        "DB_CONNECT": "@db-connect",
-        "JWT_TOKEN_SECRET": "@jwt-token-secret",
-        "PORT": "8000"
-    }
+    ]
 }
