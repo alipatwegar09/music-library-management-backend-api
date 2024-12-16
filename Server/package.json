@@ -4,13 +4,10 @@
   "description": "npm init",
   "main": "index.js",
   "type": "module",
-  "engines": {
-    "node": "18.x"
-  },
   "scripts": {
     "test": "npm start",
-    "dev": "nodemon src/app.js -e js",
-    "start": "node src/app.js"
+    "dev": "nodemon app.js -e js",
+    "start": "node app.js"
   },
   "author": "",
   "license": "ISC",
