@@ -2,7 +2,7 @@
   "name": "package",
   "version": "18.20.2",
   "description": "npm init",
-  "main": "index.js",
+  "main": "app.js",
   "type": "module",
   "scripts": {
     "test": "npm start",
